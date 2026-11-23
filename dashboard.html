@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="dark" lang="hu">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ADH-Do">
+    <meta name="theme-color" content="#101922">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <title>ADH-Do! Dashboard</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms@0.5.10,container-queries@0.1.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4A90E2",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Oswald", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* iOS safe area support */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Better touch targets for iOS */
+        button,
+        [role="button"] {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-200">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-5 sm:px-6 lg:px-8">
+
+                <!-- Header -->
+                <header
+                    class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-[#283039] px-4 sm:px-6 py-3">
+                    <div class="flex items-center gap-4">
+                        <div class="h-8 w-8 text-primary">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold tracking-[-0.015em]">ADH-Do!</h1>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="themeToggleBtn"
+                            class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600"
+                            title="Téma váltása">
+                            <span class="material-symbols-outlined">light_mode</span>
+                        </button>
+                        <button id="settingsBtn"
+                            class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">
+                            <span class="material-symbols-outlined">settings</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class="flex flex-col gap-8 pt-8">
+                    <section>
+                        <h2 class="text-2xl font-bold tracking-tight px-4 pb-3 pt-5">Aktív projektek</h2>
+                        <div id="tagFilters" class="flex flex-wrap gap-2 px-4 pb-1"></div>
+                        <div id="active-projects" class="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3">
+                            <!-- Projects will be loaded here -->
+                        </div>
+                    </section>
+
+                    <section>
+                        <details class="group">
+                            <summary class="flex cursor-pointer list-none items-center justify-between p-4">
+                                <h2 class="text-2xl font-bold tracking-tight">Befejezett projektek</h2>
+                                <span
+                                    class="text-gray-500 dark:text-gray-400 transition-transform group-open:rotate-180">
+                                    <span class="material-symbols-outlined">expand_more</span>
+                                </span>
+                            </summary>
+                            <div id="completed-projects"
+                                class="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 md:grid-cols-3">
+                                <!-- Completed projects will be loaded here -->
+                            </div>
+                        </details>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal (initially hidden) -->
+    <div id="addProjectModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Új projekt</h3>
+
+            <input id="projectName" type="text" placeholder="Projekt neve (vagy hagyd üresen a dátumhoz)"
+                class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+
+            <div class="mb-4">
+                <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Tervezett kezdési időpont</label>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="addProjectStartDec"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-15</button>
+                    <input id="projectStartDate" type="datetime-local"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="addProjectStartInc"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+15</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Címkék (opcionális)</label>
+                <div id="addProjectTagsChips" class="flex flex-wrap gap-2 mb-2"></div>
+                <input id="addProjectTagInput" type="text" placeholder="Írj be egy címkét, majd Enter"
+                    class="w-full h-10 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Háttérkép
+                    (opcionális)</label>
+
+                <!-- Tab választó -->
+                <div class="flex gap-2 mb-3">
+                    <button type="button" id="addImageTabFile"
+                        class="flex-1 px-4 py-2 text-sm font-semibold bg-primary text-white rounded-md transition-colors">Fájl
+                        feltöltés</button>
+                    <button type="button" id="addImageTabUrl"
+                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors">URL
+                        megadása</button>
+                </div>
+
+                <!-- Fájl feltöltés -->
+                <div id="addImageFileUpload">
+                    <input id="projectImage" type="file" accept="image/*"
+                        class="w-full px-4 py-2 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                </div>
+
+                <!-- URL megadás -->
+                <div id="addImageUrlInput" class="hidden">
+                    <input id="projectImageUrl" type="url" placeholder="https://example.com/image.jpg"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="loadAddImageUrlBtn"
+                        class="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Kép
+                        betöltése</button>
+                </div>
+
+                <!-- Előnézet -->
+                <div id="imagePreview" class="mt-2 hidden">
+                    <img id="previewImg" src="" alt="Előnézet" class="w-full h-32 object-cover rounded-lg">
+                    <button type="button" id="removeImageBtn" class="mt-2 text-sm text-red-500 hover:text-red-700">Kép
+                        eltávolítása</button>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button id="cancelAddProjectBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmAddProjectBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Létrehozás</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Project Modal (initially hidden) -->
+    <div id="editProjectModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Projekt szerkesztése</h3>
+
+            <input id="editProjectName" type="text" placeholder="Projekt neve"
+                class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+
+            <div class="mb-4">
+                <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Tervezett kezdési időpont</label>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="editProjectStartDec"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-15</button>
+                    <input id="editProjectStartDate" type="datetime-local"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="editProjectStartInc"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+15</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Címkék (opcionális)</label>
+                <div id="editProjectTagsChips" class="flex flex-wrap gap-2 mb-2"></div>
+                <input id="editProjectTagInput" type="text" placeholder="Írj be egy címkét, majd Enter"
+                    class="w-full h-10 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Háttérkép
+                    (opcionális)</label>
+
+                <!-- Tab választó -->
+                <div class="flex gap-2 mb-3">
+                    <button type="button" id="editImageTabFile"
+                        class="flex-1 px-4 py-2 text-sm font-semibold bg-primary text-white rounded-md transition-colors">Fájl
+                        feltöltés</button>
+                    <button type="button" id="editImageTabUrl"
+                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors">URL
+                        megadása</button>
+                </div>
+
+                <!-- Fájl feltöltés -->
+                <div id="editImageFileUpload">
+                    <input id="editProjectImage" type="file" accept="image/*"
+                        class="w-full px-4 py-2 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                </div>
+
+                <!-- URL megadás -->
+                <div id="editImageUrlInput" class="hidden">
+                    <input id="editProjectImageUrl" type="url" placeholder="https://example.com/image.jpg"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="loadEditImageUrlBtn"
+                        class="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Kép
+                        betöltése</button>
+                </div>
+
+                <!-- Előnézet -->
+                <div id="editImagePreview" class="mt-2 hidden">
+                    <img id="editPreviewImg" src="" alt="Előnézet" class="w-full h-32 object-cover rounded-lg">
+                    <button type="button" id="removeEditImageBtn"
+                        class="mt-2 text-sm text-red-500 hover:text-red-700">Kép eltávolítása</button>
+                </div>
+            </div>
+
+            <input type="hidden" id="editProjectId">
+
+            <div class="flex gap-4">
+                <button id="cancelEditProjectBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmEditProjectBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Mentés</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

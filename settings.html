@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="dark" lang="hu">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ADH-Do">
+    <meta name="theme-color" content="#101922">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <title>ADH-Do! - Beállítások</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms@0.5.10,container-queries@0.1.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* iOS safe area support */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Better touch targets for iOS */
+        button,
+        [role="button"] {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+    <div class="relative flex min-h-screen w-full flex-col">
+
+        <!-- Header -->
+        <header
+            class="w-full px-4 sm:px-6 lg:px-8 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c141b]">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="size-8 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold tracking-[-0.015em]">ADH-Do!</h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="themeToggleBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                        title="Téma váltása">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <button id="dashboardBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                        title="Dashboard">
+                        <span class="material-symbols-outlined">dashboard</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div class="max-w-4xl mx-auto">
+
+                <!-- Page Heading with Back Button -->
+                <div class="flex items-center gap-4 pb-6">
+                    <button id="backBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        title="Vissza">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <p
+                        class="text-gray-900 dark:text-white text-3xl sm:text-4xl font-black leading-tight tracking-[-0.033em]">
+                        Beállítások</p>
+                </div>
+
+                <!-- General Section -->
+                <h2
+                    class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+                    Általános</h2>
+                <div class="flex flex-col gap-4 p-4">
+
+                    <!-- Sound Toggle -->
+                    <div
+                        class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c141b] p-5 sm:flex-row sm:items-center">
+                        <div class="flex flex-col gap-1">
+                            <p class="text-gray-900 dark:text-white text-base font-bold">Hang</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-base">Alkalmazás hangok be- vagy
+                                kikapcsolása.</p>
+                        </div>
+                        <label
+                            class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-gray-200 dark:bg-gray-700 p-0.5 has-[:checked]:bg-primary">
+                            <input id="soundToggle" class="invisible absolute" type="checkbox" />
+                            <div id="soundToggleIndicator"
+                                class="h-full w-[27px] transform transition-transform duration-300 ease-in-out rounded-full bg-white"
+                                style="box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.06) 0px 3px 1px;">
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Time Format -->
+                    <div
+                        class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c141b] p-5 sm:flex-row sm:items-center">
+                        <div class="flex flex-col gap-1">
+                            <p class="text-gray-900 dark:text-white text-base font-bold">Időformátum</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-base">Válaszd ki az időmegjelenítési
+                                formátumot.</p>
+                        </div>
+                        <div class="flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                            <button id="format12h"
+                                class="px-4 py-1.5 text-sm font-semibold text-gray-800 dark:text-gray-200 rounded-md transition-colors">12-órás</button>
+                            <button id="format24h"
+                                class="px-4 py-1.5 text-sm font-semibold text-white bg-primary rounded-md shadow-sm transition-colors">24-órás</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Section -->
+                <h2
+                    class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+                    Adatok</h2>
+                <div class="flex flex-col gap-4 p-4">
+
+                    <!-- Statistics Link -->
+                    <a id="statisticsLink"
+                        class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c141b] p-5 transition-all duration-200 hover:border-primary/50 dark:hover:border-primary/50 sm:flex-row sm:items-center"
+                        href="statistics.html">
+                        <div class="flex items-center gap-4">
+                            <span class="material-symbols-outlined text-gray-500 dark:text-gray-400">bar_chart</span>
+                            <p class="text-gray-900 dark:text-white text-base font-bold">Statisztikák</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-gray-400 dark:text-gray-500">chevron_right</span>
+                        </div>
+                    </a>
+
+                    <!-- Export/Import -->
+                    <div class="flex flex-col gap-4 mb-4">
+                        <button id="exportBtn"
+                            class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-green-200 dark:border-green-900/50 bg-white dark:bg-[#0c141b] p-5 transition-all duration-200 hover:border-green-500 dark:hover:border-green-500 sm:flex-row sm:items-center">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-green-500">download</span>
+                                <div>
+                                    <p class="text-gray-900 dark:text-white text-base font-bold text-left">Adatok
+                                        exportálása</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm text-left">Mentsd le az összes
+                                        projektet JSON fájlba</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button id="importBtn"
+                            class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-blue-200 dark:border-blue-900/50 bg-white dark:bg-[#0c141b] p-5 transition-all duration-200 hover:border-blue-500 dark:hover:border-blue-500 sm:flex-row sm:items-center">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-blue-500">upload</span>
+                                <div>
+                                    <p class="text-gray-900 dark:text-white text-base font-bold text-left">Adatok
+                                        importálása</p>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm text-left">Töltsd vissza a
+                                        mentett JSON fájlt</p>
+                                </div>
+                            </div>
+                        </button>
+                        <input type="file" id="importFileInput" accept=".json" class="hidden">
+                    </div>
+
+                    <!-- Clear Data -->
+                    <button id="clearDataBtn"
+                        class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-red-200 dark:border-red-900/50 bg-white dark:bg-[#0c141b] p-5 transition-all duration-200 hover:border-red-500 dark:hover:border-red-500 sm:flex-row sm:items-center">
+                        <div class="flex items-center gap-4">
+                            <span class="material-symbols-outlined text-red-500">delete_forever</span>
+                            <div>
+                                <p class="text-gray-900 dark:text-white text-base font-bold text-left">Összes adat
+                                    törlése</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm text-left">Minden projekt és
+                                    beállítás törlése</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Info Section -->
+                <div class="p-4 mt-6">
+                    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0c141b] p-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">ADH-Do! v1.0</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            Egy egyszerű és hatékony projektkezelő alkalmazás ADHD-val élők és mindenki más számára.
+                        </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-500">
+                            Az adatok a böngésződben, helyben tárolódnak. Regisztráció után az adatok a felhőben is
+                            mentve lesznek.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+
+</html>

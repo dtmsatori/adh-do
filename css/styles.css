@@ -1,0 +1,191 @@
+/* ADH-Do! - Egyedi stílusok */
+/* iOS/Xcode WKWebView optimalizált verzió */
+
+/* Manrope betűtípus importálása */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+/* iOS-specifikus alapbeállítások */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* iOS safe area támogatás */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+}
+
+/* Globális betűtípus felülírása */
+body {
+  font-family: 'Manrope', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Projekt oldalon minden időt mutató szöveg 20px */
+#projectTitle {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Timeline időpontok */
+#startTime,
+#endTime {
+  font-size: 20px !important;
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Teljes idő és hátralévő idő */
+#totalTime,
+#remainingTime {
+  font-size: 20px !important;
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Projekt progress % - 2x nagyobb */
+#projectProgress {
+  font-size: 36px !important;
+  font-weight: 700 !important;
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Feladat hátralévő ideje - feladat kártyákban */
+.task-time {
+  font-size: 20px !important;
+  font-family: 'Manrope', sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+/* Feladat progress csík - 2-3x magasabb */
+.task-progress-bar {
+  height: 9px !important; /* Eredeti 1px volt, most 9px */
+}
+
+/* Dashboard projekt kártyák időpontjai */
+.project-card-time {
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Aktuális feladat neve */
+#currentTaskName {
+  font-size: 24px;
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Aktuális feladat státusz */
+#currentTaskStatus {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Wake Lock státusz */
+#wakeLockStatus {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Fejlécek */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Gombok - iOS optimalizált */
+button {
+  font-family: 'Manrope', sans-serif !important;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Interaktív elemek iOS optimalizáció */
+button:active,
+[role="button"]:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+/* Input mezők - iOS optimalizált */
+input, textarea, select {
+  font-family: 'Manrope', sans-serif !important;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 8px;
+  font-size: 16px; /* Prevent iOS zoom on focus */
+}
+
+/* Prevent iOS input zoom */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+textarea,
+select {
+  font-size: 16px !important;
+}
+
+/* Modal címek */
+.modal-title {
+  font-family: 'Manrope', sans-serif !important;
+}
+
+/* Monospace számok az időkhöz */
+.time-display {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+/* iOS Safari scroll fix */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS WebView-specifikus modal fix */
+.fixed.inset-0 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Disable text selection on interactive elements */
+.cursor-pointer,
+button,
+[role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Fix for iOS button states */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Smooth animations for iOS */
+.transition-all,
+.transition-colors,
+.transition-transform {
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+/* Hardware acceleration for better performance */
+.rounded-xl,
+.rounded-lg,
+.rounded-full {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}

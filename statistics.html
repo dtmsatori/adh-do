@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="dark" lang="hu">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ADH-Do">
+    <meta name="theme-color" content="#101922">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <title>ADH-Do! - Statisztikák</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms@0.5.10,container-queries@0.1.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* iOS safe area support */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Better touch targets for iOS */
+        button,
+        [role="button"] {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+
+            <!-- Header -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-white/10 px-6 sm:px-10 lg:px-20 py-4 bg-background-light dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-10">
+                <div class="flex items-center gap-4 text-gray-900 dark:text-white">
+                    <button id="backBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <div class="size-6 text-primary">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold">ADH-Do!</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="themeToggleBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                        title="Téma váltása">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <button id="settingsBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <span class="material-symbols-outlined">settings</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 px-4 sm:px-6 lg:px-8 py-8">
+                <div class="max-w-7xl mx-auto">
+
+                    <!-- Page Header -->
+                    <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+                        <p class="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">
+                            Statisztikák</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div
+                            class="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 dark:border-white/10 bg-white dark:bg-background-dark/50">
+                            <p class="text-gray-600 dark:text-gray-300 text-base font-medium">Összes projekt</p>
+                            <p id="totalProjects"
+                                class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold">0</p>
+                        </div>
+                        <div
+                            class="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 dark:border-white/10 bg-white dark:bg-background-dark/50">
+                            <p class="text-gray-600 dark:text-gray-300 text-base font-medium">Befejezett projektek</p>
+                            <p id="completedProjects"
+                                class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold">0</p>
+                        </div>
+                        <div
+                            class="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 dark:border-white/10 bg-white dark:bg-background-dark/50">
+                            <p class="text-gray-600 dark:text-gray-300 text-base font-medium">Összes feladat</p>
+                            <p id="totalTasks" class="text-gray-900 dark:text-white tracking-tight text-3xl font-bold">0
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Project List -->
+                    <div
+                        class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-background-dark/50 p-6">
+                        <h2 class="text-gray-800 dark:text-white text-xl font-bold mb-4">Projektek részletei</h2>
+                        <div id="projectsList" class="space-y-4">
+                            <!-- Projects will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/statistics.js"></script>
+</body>
+
+</html>

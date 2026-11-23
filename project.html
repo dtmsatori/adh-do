@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="dark" lang="hu">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ADH-Do">
+    <meta name="theme-color" content="#101922">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <title>ADH-Do! - Projekt</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms@0.5.10,container-queries@0.1.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Oswald", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* iOS safe area support */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Better touch targets for iOS */
+        button,
+        [role="button"] {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+    <div class="relative flex min-h-screen w-full flex-col items-center">
+
+        <!-- Header -->
+        <header class="w-full max-w-6xl px-4 lg:px-10 py-3 border-b border-gray-200 dark:border-gray-700/50">
+            <div class="flex items-center justify-between whitespace-nowrap">
+                <div class="flex items-center gap-4">
+                    <button id="backBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <div class="size-6 text-primary">
+                        <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold">ADH-Do!</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="themeToggleBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+                        title="Téma váltása">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <button id="settingsBtn"
+                        class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <span class="material-symbols-outlined">settings</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl flex-1 px-4 py-8 md:py-12">
+            <div class="flex flex-col gap-8">
+
+                <!-- Project Title and Progress -->
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <h1 id="projectTitle" class="text-4xl font-black tracking-[-0.033em]">Projekt</h1>
+                        <button id="editProjectInfoBtn"
+                            class="flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"
+                            title="Projekt szerkesztése">
+                            <span class="material-symbols-outlined text-4xl">edit</span>
+                        </button>
+                        <button id="restartProjectBtn"
+                            class="hidden flex items-center justify-center text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition-colors"
+                            title="Projekt újraindítása">
+                            <span class="material-symbols-outlined text-4xl">refresh</span>
+                        </button>
+                    </div>
+                    <p id="projectProgress" class="text-lg font-bold text-primary">0%</p>
+                </div>
+
+                <!-- Timeline Info -->
+                <div class="flex flex-col gap-3">
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Teljes idő: <span id="totalTime">0ó 0p</span>
+                        </p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Hátralévő idő: <span id="remainingTime">0ó 0p</span>
+                        </p>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="flex items-center gap-4 w-full">
+                        <p id="startTime" class="text-base font-medium min-w-[60px] text-right">--:--</p>
+                        <div class="relative flex-1 h-10 bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden">
+                            <div id="timelineBar" class="absolute inset-0 flex"></div>
+                            <div id="timelineProgress" class="absolute inset-0 bg-gray-900/40 pointer-events-none"
+                                style="width: 0%;"></div>
+                            <div id="timelineMarker"
+                                class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg pointer-events-none"
+                                style="left: 0%;">
+                                <div class="absolute -top-1 -left-1 size-3 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <p id="endTime" class="text-base font-medium min-w-[60px]">--:--</p>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div
+                    class="flex flex-col md:flex-row justify-between items-center gap-6 p-6 bg-white dark:bg-gray-900/50 rounded-xl shadow-sm">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-gray-500 dark:text-gray-400 text-sm font-normal">
+                            <span id="currentTaskStatus">Nincs futó feladat</span>
+                        </p>
+                        <p id="currentTaskName" class="text-xl font-bold">-</p>
+                        <!-- Wake Lock indikátor -->
+                        <p id="wakeLockStatus" class="hidden text-xs text-green-600 dark:text-green-400 mt-1">
+                            <span class="material-symbols-outlined text-sm align-middle">lock</span>
+                            Alvás megelőzve
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button id="stopBtn"
+                            class="p-3 rounded-full text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                            disabled>
+                            <span class="material-symbols-outlined text-3xl">stop</span>
+                        </button>
+                        <button id="playPauseBtn"
+                            class="p-5 rounded-full text-white bg-primary hover:bg-primary/90 transition-colors">
+                            <span class="material-symbols-outlined text-4xl">play_arrow</span>
+                        </button>
+                        <button id="muteBtn"
+                            class="p-3 rounded-full text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                            <span class="material-symbols-outlined text-3xl">volume_up</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="flex flex-col gap-3">
+                    <!-- Add Task Buttons -->
+                    <div class="flex gap-2">
+                        <button id="addTaskBtn"
+                            class="flex items-center justify-center gap-2 p-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
+                            style="width: 50%;">
+                            <span class="material-symbols-outlined">add</span>
+                            <span class="font-medium">Új feladat</span>
+                        </button>
+                        <button id="addMultipleTasksBtn"
+                            class="flex items-center justify-center gap-1 p-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
+                            style="width: 25%;">
+                            <span class="material-symbols-outlined text-xl">playlist_add</span>
+                            <span class="font-medium text-sm">Több</span>
+                        </button>
+                        <button id="breakSettingsBtn"
+                            class="flex items-center justify-center gap-1 p-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
+                            style="width: 25%;">
+                            <span class="material-symbols-outlined text-xl">coffee</span>
+                            <span class="font-medium text-sm">Szünet</span>
+                        </button>
+                    </div>
+
+                    <!-- Batch Action Toolbar -->
+                    <div id="batchDeleteToolbar"
+                        class="hidden flex-col gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="selectAllCheckbox"
+                                    class="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer">
+                                <label for="selectAllCheckbox"
+                                    class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                    <span id="selectedCount">0</span> kijelölve
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-2">
+                            <button id="batchCompleteBtn"
+                                class="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                                <span class="material-symbols-outlined text-lg">check_circle</span>
+                                Kész
+                            </button>
+                            <button id="batchDeleteBtn"
+                                class="flex items-center gap-1 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors">
+                                <span class="material-symbols-outlined text-lg">delete</span>
+                                Törlés
+                            </button>
+                            </div>
+                        </div>
+                        <!-- Mozgatás / Másolás -->
+                        <div
+                            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 border-t border-gray-200 dark:border-gray-700 pt-3">
+                            <div class="relative flex-1">
+                                <select id="batchTargetProject"
+                                    class="w-full appearance-none rounded-lg text-gray-900 dark:text-white bg-white dark:bg-[#1c2127] border border-gray-200 dark:border-[#3b4754] h-10 px-3 pr-9 text-sm">
+                                    <option value="">Válassz projektet...</option>
+                                </select>
+                                <span
+                                    class="material-symbols-outlined pointer-events-none absolute right-2 top-2 text-gray-500 dark:text-gray-400 text-xl">expand_more</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="batchMoveBtn"
+                                    class="flex items-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors flex-1 sm:flex-none justify-center">
+                                    <span class="material-symbols-outlined text-lg">drive_file_move</span>
+                                    Mozgatás
+                                </button>
+                                <button id="batchCopyBtn"
+                                    class="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors flex-1 sm:flex-none justify-center">
+                                    <span class="material-symbols-outlined text-lg">content_copy</span>
+                                    Másolás
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Hozzáadás új projekthez -->
+                        <button id="batchNewProjectBtn"
+                            class="flex items-center justify-center gap-1 px-3 py-2 border-2 border-dashed border-primary text-primary hover:bg-primary/10 text-sm font-semibold rounded-lg transition-colors">
+                            <span class="material-symbols-outlined text-lg">create_new_folder</span>
+                            Hozzáadás új projekthez
+                        </button>
+                    </div>
+
+                    <div id="tasksList" class="flex flex-col gap-3">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+
+                    <!-- Completed Tasks Section -->
+                    <div id="completedTasksSection" class="mt-8 hidden">
+                        <h3 class="text-lg font-bold text-gray-600 dark:text-gray-400 mb-4">Befejezett feladatok</h3>
+                        <div id="completedTasksList" class="flex flex-col gap-3 opacity-60">
+                            <!-- Completed tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addTaskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Új feladat</h3>
+            <input id="taskName" type="text" placeholder="Feladat neve"
+                class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Óra</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="taskHoursDec"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
+                        <input id="taskHours" type="number" min="0" value="0"
+                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" id="taskHoursInc"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Perc</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="taskMinutesDec"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-5</button>
+                        <input id="taskMinutes" type="number" min="0" max="59" value="30"
+                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" id="taskMinutesInc"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+5</button>
+                    </div>
+                </div>
+            </div>
+
+            <textarea id="taskNote" placeholder="Megjegyzés (opcionális)"
+                class="w-full min-h-[100px] px-4 py-3 mb-1 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg resize-none"></textarea>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mb-6">
+                Formázás: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">**félkövér**</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">*dőlt*</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">__aláhúzott__</code>
+            </p>
+
+            <div class="flex gap-4">
+                <button id="cancelAddTaskBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmAddTaskBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Létrehozás</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Multiple Tasks Modal -->
+    <div id="addMultipleTasksModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-lg w-full">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Több feladat hozzáadása</h3>
+            <!-- Elhelyezés (csak ha már vannak feladatok) -->
+            <div id="multiplePositionRow" class="hidden mb-4">
+                <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Elhelyezés</label>
+                <div class="flex gap-2">
+                    <button type="button" id="multiplePositionTop" data-active="false"
+                        class="multi-pos-btn flex-1 flex items-center justify-center gap-1 h-10 rounded-lg border-2 text-sm font-medium transition-colors">
+                        <span class="material-symbols-outlined text-lg">vertical_align_top</span>
+                        Lista tetejére
+                    </button>
+                    <button type="button" id="multiplePositionBottom" data-active="true"
+                        class="multi-pos-btn flex-1 flex items-center justify-center gap-1 h-10 rounded-lg border-2 text-sm font-medium transition-colors">
+                        <span class="material-symbols-outlined text-lg">vertical_align_bottom</span>
+                        Lista aljára
+                    </button>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                Formátum: <code
+                    class="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded text-xs">Feladatnév (idő percben) "megjegyzés"</code> —
+                pontosvesszővel (<code class="bg-gray-200 dark:bg-gray-700 px-1 rounded text-xs">;</code>) elválasztva. A megjegyzés opcionális.
+            </p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">
+                Példa: <code
+                    class="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">Tervezés (30) "**Fontos**, ne hagyd ki"; Kódolás (60); Tesztelés (15) "Csak *gyors* teszt"</code>
+            </p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
+                Megjegyzésben formázható: <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">**félkövér**</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">*dőlt*</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">__aláhúzott__</code>
+            </p>
+            <textarea id="multipleTasksInput" placeholder='Tervezés (30) "**Fontos**, ne hagyd ki"; Kódolás (60); Tesztelés (15) "Csak *gyors* teszt"'
+                class="w-full min-h-[140px] px-4 py-3 mb-2 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg resize-none font-mono text-sm"></textarea>
+            <p id="multipleTasksPreview" class="text-xs text-gray-400 dark:text-gray-500 mb-4 min-h-[20px]"></p>
+
+            <div class="flex gap-4">
+                <button id="cancelMultipleTasksBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmMultipleTasksBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Hozzáadás</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div id="editTaskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Feladat szerkesztése</h3>
+
+            <input id="editTaskName" type="text" placeholder="Feladat neve"
+                class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Óra</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="editTaskHoursDec"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
+                        <input id="editTaskHours" type="number" min="0" value="0"
+                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" id="editTaskHoursInc"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Perc</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="editTaskMinutesDec"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-5</button>
+                        <input id="editTaskMinutes" type="number" min="0" max="59" value="30"
+                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" id="editTaskMinutesInc"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+5</button>
+                    </div>
+                </div>
+            </div>
+
+            <textarea id="editTaskNote" placeholder="Megjegyzés (opcionális)"
+                class="w-full min-h-[100px] px-4 py-3 mb-1 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg resize-none"></textarea>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
+                Formázás: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">**félkövér**</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">*dőlt*</code>,
+                <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">__aláhúzott__</code>
+            </p>
+
+            <div class="border-t border-gray-300 dark:border-[#3b4754] pt-4 mb-4">
+                <button type="button" id="toggleMoveCopyBtn"
+                    class="flex items-center justify-between w-full text-sm font-bold text-gray-900 dark:text-white mb-0 cursor-pointer hover:text-primary dark:hover:text-primary transition-colors">
+                    <span>Feladat mozgatása/másolása</span>
+                    <span class="material-symbols-outlined text-lg transition-transform"
+                        id="moveCopyArrow">expand_more</span>
+                </button>
+                <div id="moveCopyContent" class="hidden mt-3">
+                    <div class="relative mb-3">
+                        <select id="editTaskTargetProject"
+                            class="w-full appearance-none rounded-lg text-gray-900 dark:text-white bg-gray-100 dark:bg-[#1c2127] border border-gray-200 dark:border-[#3b4754] h-12 px-4 pr-10">
+                            <option value="">Válassz projektet...</option>
+                        </select>
+                        <span
+                            class="material-symbols-outlined pointer-events-none absolute right-4 top-3 text-gray-500 dark:text-gray-400">expand_more</span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="moveTaskBtn"
+                            class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold bg-blue-500 text-white hover:bg-blue-600">Mozgatás</button>
+                        <button id="copyTaskBtn"
+                            class="flex-1 px-4 py-2 rounded-lg text-sm font-semibold bg-green-500 text-white hover:bg-green-600">Másolás</button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="editTaskId">
+
+            <div class="flex gap-4">
+                <button id="cancelEditTaskBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmEditTaskBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Mentés</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Project Info Modal -->
+    <div id="editProjectInfoModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Projekt szerkesztése</h3>
+
+            <input id="editProjectInfoName" type="text" placeholder="Projekt neve"
+                class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+
+            <div class="mb-4">
+                <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Tervezett kezdési időpont</label>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="editProjectInfoStartDec"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-15</button>
+                    <input id="editProjectInfoStartDate" type="datetime-local"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="editProjectInfoStartInc"
+                        class="flex items-center justify-center w-12 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+15</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Háttérkép
+                    (opcionális)</label>
+
+                <!-- Tab választó -->
+                <div class="flex gap-2 mb-3">
+                    <button type="button" id="imageTabFile"
+                        class="flex-1 px-4 py-2 text-sm font-semibold bg-primary text-white rounded-md transition-colors">Fájl
+                        feltöltés</button>
+                    <button type="button" id="imageTabUrl"
+                        class="flex-1 px-4 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors">URL
+                        megadása</button>
+                </div>
+
+                <!-- Fájl feltöltés -->
+                <div id="imageFileUpload">
+                    <input id="editProjectInfoImage" type="file" accept="image/*"
+                        class="w-full px-4 py-2 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                </div>
+
+                <!-- URL megadás -->
+                <div id="imageUrlInput" class="hidden">
+                    <input id="editProjectInfoImageUrl" type="url" placeholder="https://example.com/image.jpg"
+                        class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
+                    <button type="button" id="loadImageFromUrlBtn"
+                        class="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Kép
+                        betöltése</button>
+                </div>
+
+                <!-- Előnézet -->
+                <div id="editProjectInfoImagePreview" class="mt-2 hidden">
+                    <img id="editProjectInfoPreviewImg" src="" alt="Előnézet"
+                        class="w-full h-32 object-cover rounded-lg">
+                    <button type="button" id="removeProjectInfoImageBtn"
+                        class="mt-2 text-sm text-red-500 hover:text-red-700">Kép eltávolítása</button>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button id="cancelEditProjectInfoBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmEditProjectInfoBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Mentés</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Break Settings Modal -->
+    <div id="breakSettingsModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-sm w-full">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Szünet beállítása</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Feladatok közötti szünet automatikus beillesztése.</p>
+
+            <!-- Mode selector tabs -->
+            <div class="flex gap-2 mb-6">
+                <button type="button" id="breakModePercent"
+                    class="flex-1 px-4 py-2.5 text-sm font-semibold bg-primary text-white rounded-lg transition-colors">
+                    %
+                </button>
+                <button type="button" id="breakModeMinutes"
+                    class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 rounded-lg transition-colors">
+                    Perc
+                </button>
+            </div>
+
+            <!-- Value stepper -->
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <button type="button" id="breakValueDec"
+                    class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-lg shrink-0">
+                    -5
+                </button>
+                <div class="flex items-baseline gap-1">
+                    <span id="breakValueDisplay" class="text-5xl font-black text-gray-900 dark:text-white">0</span>
+                    <span id="breakValueUnit" class="text-xl font-bold text-gray-500 dark:text-gray-400">%</span>
+                </div>
+                <button type="button" id="breakValueInc"
+                    class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-lg shrink-0">
+                    +5
+                </button>
+            </div>
+
+            <!-- Info text -->
+            <p id="breakInfoText" class="text-xs text-center text-gray-400 dark:text-gray-500 mb-6 min-h-[32px]"></p>
+
+            <div class="flex gap-4">
+                <button id="cancelBreakSettingsBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-gray-900 dark:text-white bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-gray-600">Mégse</button>
+                <button id="confirmBreakSettingsBtn"
+                    class="flex-1 px-6 py-3 rounded-lg text-white bg-primary hover:opacity-90">Mentés</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/project.js"></script>
+</body>
+
+</html>
