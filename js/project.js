@@ -527,7 +527,7 @@ function setupProjectEventListeners() {
     taskMinutesDec.addEventListener('click', function (e) {
       e.preventDefault();
       const input = document.getElementById('taskMinutes');
-      input.value = Math.max(0, parseInt(input.value || 0) - 5);
+      input.value = Math.max(0, parseInt(input.value || 0) - 1);
     });
   }
   const taskMinutesInc = document.getElementById('taskMinutesInc');
@@ -535,7 +535,7 @@ function setupProjectEventListeners() {
     taskMinutesInc.addEventListener('click', function (e) {
       e.preventDefault();
       const input = document.getElementById('taskMinutes');
-      input.value = Math.min(59, parseInt(input.value || 0) + 5);
+      input.value = Math.min(59, parseInt(input.value || 0) + 1);
     });
   }
 
@@ -561,7 +561,7 @@ function setupProjectEventListeners() {
     editTaskMinutesDec.addEventListener('click', function (e) {
       e.preventDefault();
       const input = document.getElementById('editTaskMinutes');
-      input.value = Math.max(0, parseInt(input.value || 0) - 5);
+      input.value = Math.max(0, parseInt(input.value || 0) - 1);
     });
   }
   const editTaskMinutesInc = document.getElementById('editTaskMinutesInc');
@@ -569,7 +569,7 @@ function setupProjectEventListeners() {
     editTaskMinutesInc.addEventListener('click', function (e) {
       e.preventDefault();
       const input = document.getElementById('editTaskMinutes');
-      input.value = Math.min(59, parseInt(input.value || 0) + 5);
+      input.value = Math.min(59, parseInt(input.value || 0) + 1);
     });
   }
 
@@ -992,8 +992,8 @@ function createTaskCardElement(task, index) {
   card.setAttribute('data-task-id', task.id);
 
   card.innerHTML = `
-    <div class="relative p-4 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3 flex-1">
+    <div class="relative p-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2">
+      <div class="flex items-center gap-3 flex-1 min-w-0">
         <span class="material-symbols-outlined text-gray-400 dark:text-gray-500 cursor-grab drag-handle ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}">drag_indicator</span>
         <div class="task-move-arrows hidden flex-col items-center shrink-0 -my-2">
           <button type="button" class="task-move-up-btn size-6 flex items-center justify-center rounded text-primary hover:bg-primary/10 disabled:opacity-30 disabled:pointer-events-none transition-colors" title="Feljebb">
@@ -1004,7 +1004,7 @@ function createTaskCardElement(task, index) {
           </button>
         </div>
         <input type="checkbox" class="task-checkbox w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer shrink-0 ${isRunning ? 'opacity-50 pointer-events-none' : ''}" data-task-id="${task.id}" ${isRunning ? 'disabled' : ''}>
-        <div class="flex-1">
+        <div class="flex-1 min-w-0 break-words">
           <p class="font-bold ${isRunning
       ? 'text-green-700 dark:text-green-400'
       : 'text-gray-800 dark:text-gray-200'
@@ -1019,7 +1019,7 @@ function createTaskCardElement(task, index) {
     }
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1 sm:gap-3 shrink-0 ml-auto">
         ${taskStartLabel
       ? `<p class="task-start-time text-gray-400 dark:text-gray-500 font-medium text-sm whitespace-nowrap">▶ ${taskStartLabel}</p>`
       : ''
@@ -1027,7 +1027,7 @@ function createTaskCardElement(task, index) {
         <p class="task-time font-medium ${isRunning
       ? 'text-green-700 dark:text-green-400'
       : 'text-gray-700 dark:text-gray-300'
-    } min-w-[90px] text-right">
+    } sm:min-w-[90px] text-right whitespace-nowrap">
           ${isRunning
       ? formatTimeRemaining(task.duration * 60 - elapsedSeconds)
       : formatTimeRemaining(task.duration * 60)
@@ -1565,7 +1565,7 @@ function hideAddTaskModal() {
   document.getElementById('addTaskModal').classList.add('hidden');
   document.getElementById('taskName').value = '';
   document.getElementById('taskHours').value = '0';
-  document.getElementById('taskMinutes').value = '30';
+  document.getElementById('taskMinutes').value = '3';
   document.getElementById('taskNote').value = '';
   pendingInsertIndex = null;
 }
@@ -1605,8 +1605,10 @@ function addTask() {
   insertTasksAtActiveIndex([newTask], insertIndex);
   saveCurrentProject();
 
+  // Ha a + jelek egyikével adtuk hozzá, maradunk beszúró módban (több feladathoz)
+  const keepInsertMode = insertMode;
   hideAddTaskModal();
-  setInsertMode(false);
+  setInsertMode(keepInsertMode);
 
   loadTasks();
   updateProjectProgress();
@@ -1637,6 +1639,15 @@ function deleteTask(taskId) {
 }
 
 // Feladat szerkesztése modal megnyitása
+// Mozgatás/másolás célpontjai: csak a többi, még aktív (nem befejezett) projekt
+function getActiveTargetProjects() {
+  return getProjects().filter(p =>
+    p.id !== currentProject.id &&
+    !p.completed &&
+    !(p.tasks && p.tasks.length > 0 && p.tasks.every(t => t.completed))
+  );
+}
+
 function editTask(taskId) {
   const task = currentProject.tasks.find(t => t.id === taskId);
   if (!task) {
@@ -1654,12 +1665,10 @@ function editTask(taskId) {
   document.getElementById('editTaskMinutes').value = minutes;
   document.getElementById('editTaskNote').value = task.note || '';
 
-  const projects = getProjects();
   const targetSelect = document.getElementById('editTaskTargetProject');
   targetSelect.innerHTML = '<option value="">Válassz projektet...</option>';
 
-  projects
-    .filter(p => p.id !== currentProject.id)
+  getActiveTargetProjects()
     .forEach(p => {
       targetSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`;
     });
@@ -2963,9 +2972,7 @@ function updateBatchDeleteToolbar() {
     if (batchTargetSelect) {
       const currentValue = batchTargetSelect.value;
       batchTargetSelect.innerHTML = '<option value="">Válassz projektet...</option>';
-      const projects = getProjects();
-      projects
-        .filter(p => p.id !== currentProject.id)
+      getActiveTargetProjects()
         .forEach(p => {
           batchTargetSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`;
         });

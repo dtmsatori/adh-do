@@ -268,19 +268,19 @@
 
     <!-- Add Task Modal -->
     <div id="addTaskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Új feladat</h3>
             <input id="taskName" type="text" placeholder="Feladat neve"
                 class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
 
-            <div class="flex gap-4 mb-4">
+            <div class="flex flex-col sm:flex-row gap-4 mb-4">
                 <div class="flex-1">
                     <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Óra</label>
                     <div class="flex items-center gap-2">
                         <button type="button" id="taskHoursDec"
                             class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
-                        <input id="taskHours" type="number" min="0" value="0"
-                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <input id="taskHours" type="number" inputmode="numeric" min="0" value="0"
+                            class="w-full min-w-[3.5rem] h-12 px-2 text-lg font-bold bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         <button type="button" id="taskHoursInc"
                             class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
                     </div>
@@ -289,11 +289,11 @@
                     <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Perc</label>
                     <div class="flex items-center gap-2">
                         <button type="button" id="taskMinutesDec"
-                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-5</button>
-                        <input id="taskMinutes" type="number" min="0" max="59" value="30"
-                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
+                        <input id="taskMinutes" type="number" inputmode="numeric" min="0" max="59" value="3"
+                            class="w-full min-w-[3.5rem] h-12 px-2 text-lg font-bold bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         <button type="button" id="taskMinutesInc"
-                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+5</button>
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
                     </div>
                 </div>
             </div>
@@ -364,20 +364,20 @@
 
     <!-- Edit Task Modal -->
     <div id="editTaskModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div class="bg-white dark:bg-[#111418] rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="bg-white dark:bg-[#111418] rounded-xl p-5 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Feladat szerkesztése</h3>
 
             <input id="editTaskName" type="text" placeholder="Feladat neve"
                 class="w-full h-12 px-4 mb-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg">
 
-            <div class="flex gap-4 mb-4">
+            <div class="flex flex-col sm:flex-row gap-4 mb-4">
                 <div class="flex-1">
                     <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Óra</label>
                     <div class="flex items-center gap-2">
                         <button type="button" id="editTaskHoursDec"
                             class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
-                        <input id="editTaskHours" type="number" min="0" value="0"
-                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <input id="editTaskHours" type="number" inputmode="numeric" min="0" value="0"
+                            class="w-full min-w-[3.5rem] h-12 px-2 text-lg font-bold bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         <button type="button" id="editTaskHoursInc"
                             class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
                     </div>
@@ -386,11 +386,11 @@
                     <label class="text-sm text-gray-600 dark:text-gray-400 mb-2 block">Perc</label>
                     <div class="flex items-center gap-2">
                         <button type="button" id="editTaskMinutesDec"
-                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-5</button>
-                        <input id="editTaskMinutes" type="number" min="0" max="59" value="30"
-                            class="w-full h-12 px-4 bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-600 dark:hover:text-red-400 transition-colors font-bold text-sm shrink-0">-1</button>
+                        <input id="editTaskMinutes" type="number" inputmode="numeric" min="0" max="59" value="3"
+                            class="w-full min-w-[3.5rem] h-12 px-2 text-lg font-bold bg-gray-100 dark:bg-[#1c2127] text-gray-900 dark:text-white border border-gray-200 dark:border-[#3b4754] rounded-lg text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         <button type="button" id="editTaskMinutesInc"
-                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+5</button>
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-green-100 dark:hover:bg-green-900/40 hover:text-green-600 dark:hover:text-green-400 transition-colors font-bold text-sm shrink-0">+1</button>
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@
 //
 // Új kiadásnál a CACHE_VERSION növelésével a régi tároló törlődik.
 
-const CACHE_VERSION = 'adhdo-v1';
+const CACHE_VERSION = 'adhdo-v2';
 const LOCAL_CACHE = CACHE_VERSION + '-local';
 const CDN_CACHE = CACHE_VERSION + '-cdn';
 

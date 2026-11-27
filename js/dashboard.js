@@ -835,6 +835,7 @@ let editProjectTagsDraft = [];
 function renderDraftTagChips(chipsContainerId, tagsArray) {
   const container = document.getElementById(chipsContainerId);
   if (!container) return;
+  renderTagSuggestions(chipsContainerId, tagsArray);
   container.innerHTML = '';
   tagsArray.forEach((tag, idx) => {
     const chip = document.createElement('span');
@@ -852,6 +853,34 @@ function renderDraftTagChips(chipsContainerId, tagsArray) {
     });
     chip.appendChild(removeBtn);
     container.appendChild(chip);
+  });
+}
+
+// Meglévő címkék felsorolása a beviteli mező alatt: egy koppintással hozzáadhatók
+function renderTagSuggestions(chipsContainerId, tagsArray) {
+  const wrap = document.getElementById(chipsContainerId.replace('Chips', 'Suggestions'));
+  if (!wrap) return;
+  const list = wrap.querySelector('.tag-suggestion-list');
+  const allTags = [];
+  getProjects().forEach(p => (p.tags || []).forEach(t => {
+    if (!allTags.some(a => a.toLowerCase() === t.toLowerCase())) allTags.push(t);
+  }));
+  const available = allTags
+    .filter(t => !tagsArray.some(d => d.toLowerCase() === t.toLowerCase()))
+    .sort((a, b) => a.localeCompare(b, 'hu'));
+  list.innerHTML = '';
+  wrap.classList.toggle('hidden', available.length === 0);
+  available.forEach(tag => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'inline-flex items-center gap-0.5 px-2.5 py-1 text-sm rounded-full border border-dashed border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-primary hover:text-primary transition-colors';
+    btn.textContent = '+ ' + tag;
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!tagsArray.some(d => d.toLowerCase() === tag.toLowerCase())) tagsArray.push(tag);
+      renderDraftTagChips(chipsContainerId, tagsArray);
+    });
+    list.appendChild(btn);
   });
 }
 
