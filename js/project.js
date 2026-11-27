@@ -992,7 +992,7 @@ function createTaskCardElement(task, index) {
   card.setAttribute('data-task-id', task.id);
 
   card.innerHTML = `
-    <div class="relative p-4 flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2">
+    <div class="relative p-4 flex items-center justify-between gap-2 sm:gap-4">
       <div class="flex items-center gap-3 flex-1 min-w-0">
         <span class="material-symbols-outlined text-gray-400 dark:text-gray-500 cursor-grab drag-handle ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}">drag_indicator</span>
         <div class="task-move-arrows hidden flex-col items-center shrink-0 -my-2">
@@ -1004,7 +1004,7 @@ function createTaskCardElement(task, index) {
           </button>
         </div>
         <input type="checkbox" class="task-checkbox w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-primary focus:ring-primary cursor-pointer shrink-0 ${isRunning ? 'opacity-50 pointer-events-none' : ''}" data-task-id="${task.id}" ${isRunning ? 'disabled' : ''}>
-        <div class="flex-1 min-w-0 break-words">
+        <div class="flex-1 min-w-0 break-words hyphens-auto">
           <p class="font-bold ${isRunning
       ? 'text-green-700 dark:text-green-400'
       : 'text-gray-800 dark:text-gray-200'
@@ -1019,7 +1019,8 @@ function createTaskCardElement(task, index) {
     }
         </div>
       </div>
-      <div class="flex items-center gap-1 sm:gap-3 shrink-0 ml-auto">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div class="flex flex-col sm:flex-row items-end sm:items-center sm:gap-3">
         ${taskStartLabel
       ? `<p class="task-start-time text-gray-400 dark:text-gray-500 font-medium text-sm whitespace-nowrap">▶ ${taskStartLabel}</p>`
       : ''
@@ -1033,12 +1034,14 @@ function createTaskCardElement(task, index) {
       : formatTimeRemaining(task.duration * 60)
     }
         </p>
+        </div>
         ${isRunning
       ? `<button class="complete-task-btn size-8 flex items-center justify-center text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-md transition-colors" title="Kész vagyok" data-task-id="${task.id}">
             <span class="material-symbols-outlined text-xl">check_circle</span>
           </button>`
       : ''
     }
+        <div class="flex flex-col sm:flex-row items-center gap-0.5 sm:gap-3">
         <button class="duplicate-task-btn size-8 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition-colors ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}" ${isRunning ? 'disabled' : ''} data-task-id="${task.id}" title="Duplikálás">
           <span class="material-symbols-outlined text-xl">content_copy</span>
         </button>
@@ -1048,6 +1051,7 @@ function createTaskCardElement(task, index) {
         <button class="delete-task-btn size-8 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors ${isRunning ? 'opacity-50 cursor-not-allowed' : ''}" ${isRunning ? 'disabled' : ''} data-task-id="${task.id}">
           <span class="material-symbols-outlined text-xl">delete</span>
         </button>
+        </div>
       </div>
     </div>
     <div class="absolute bottom-0 left-0 right-0 task-progress-bar bg-gray-200 dark:bg-gray-700">
